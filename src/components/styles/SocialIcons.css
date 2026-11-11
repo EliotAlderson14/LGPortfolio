@@ -81,6 +81,12 @@ div.resume-button span {
   width: 100%;
   z-index: 99999;
 }
+@media only screen and (max-width: 768px) {
+  .resume-button {
+    display: none !important;
+  }
+}
+
 @media only screen and (min-width: 900px) {
   .social-icons {
     display: flex;

@@ -13,12 +13,17 @@ const Navbar = () => {
   const { lang, setLang, t } = useLanguage();
 
   useEffect(() => {
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.7,
+      smooth: isTouchDevice ? 0.8 : 1.7,
       speed: 1.7,
       effects: true,
+      smoothTouch: 0.1,
       autoResize: true,
       ignoreMobileResize: true,
     });
@@ -41,9 +46,12 @@ const Navbar = () => {
     e: React.MouseEvent<HTMLAnchorElement>,
     section: string
   ) => {
-    if (window.innerWidth > 1024 && smoother) {
-      e.preventDefault();
+    e.preventDefault();
+    if (smoother) {
       smoother.scrollTo(section, true, "top top");
+    } else {
+      const el = document.querySelector(section);
+      el?.scrollIntoView({ behavior: "smooth" });
     }
   };
 

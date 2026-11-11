@@ -21,7 +21,7 @@ const Work = () => {
       const rect = box[0].getBoundingClientRect();
       const parent = box[0].parentElement;
       const parentWidth = parent ? parent.getBoundingClientRect().width : window.innerWidth;
-      const padding = 60;
+      const padding = window.innerWidth <= 768 ? 20 : 60;
       translateX = rect.width * box.length - (rectLeft + parentWidth) + padding;
     }
 
@@ -35,6 +35,7 @@ const Work = () => {
         scrub: true,
         pin: true,
         id: "work",
+        invalidateOnRefresh: true,
       },
     });
 
@@ -43,7 +44,14 @@ const Work = () => {
       ease: "none",
     });
 
+    const handleResize = () => {
+      setTranslateX();
+      ScrollTrigger.getById("work")?.refresh();
+    };
+    window.addEventListener("resize", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
       timeline.kill();
       ScrollTrigger.getById("work")?.kill();
     };
